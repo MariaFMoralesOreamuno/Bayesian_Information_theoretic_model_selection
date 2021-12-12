@@ -1,0 +1,8 @@
+#Python files: 
+.idea
+__pycache__
+*.log
+
+#Folders 
+Results/
+Input/
