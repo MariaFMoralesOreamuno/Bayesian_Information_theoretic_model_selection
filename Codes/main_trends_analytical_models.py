@@ -31,7 +31,7 @@ from plots.plot_trends import *
 
 results_path = r'' + os.path.abspath(r'..\Results')
 
-MC_size = 10_000  # number of MC runs
+MC_size = 1_000_000  # number of MC runs
 
 # Set scenario:
 scenario_1 = True
