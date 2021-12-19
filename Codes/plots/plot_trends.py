@@ -3,7 +3,7 @@ Module with plotting functions for the main_gw_errors.py and main_am_trans.py pr
 the analysis of Bayesian and information theoretic scores with increasing variable, e.g. number parameters, error value,
 etc.
 """
-from plots_fun import *
+from plots.plots_fun import *
 
 
 def plot_outputs_gw_trends(model_list, save_name, m_type, dp=0):
