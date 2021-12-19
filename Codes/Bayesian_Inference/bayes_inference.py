@@ -1,6 +1,6 @@
 from config import *
 from log import *
-
+warnings.filterwarnings("ignore")
 
 class BayesInference:
 
