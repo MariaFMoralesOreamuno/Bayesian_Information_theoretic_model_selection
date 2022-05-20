@@ -4,13 +4,7 @@ Author: María Fernanda Morales Oreamuno
 Date created: 24/08/2021
 Last modified: 12/12/2021
 
-Program runs the bayesian model selection and bayesian model similarity analysis for a set of 2D groundwater models.
-
-Based on MATLAB codes:
-    BMS codes: Bayesian Model Selection: BME, RE, IE scores
-                Author: Sergey Oladyshkin
-    Groundwater models: MC_FEM_GW_main.M  (version 05/2021)
-                          Authors: Anneli Guthke
+Program runs the Bayesian model selection and bayesian model similarity analysis for a set of 2D groundwater models.
 
 Based on the following papers:
     Oladyshkin, S. and Nowak, W. The Connection between Bayesian Inference and Information Theory for Model
@@ -18,9 +12,12 @@ Based on the following papers:
     Schöniger, A., Illman, W. A., Wöhling, T., & Nowak, W. (2015). Finding the right balance between groundwater model
         complexity and experimental effort via Bayesian model selection. Journal of Hydrology, 531, 96-110.
 
-
 ---------------------------------------------------------------------------------------------------------------------
-Description of MATLAB program
+Generation of GW model results:
+
+Based on: Schöniger, A., Nowak, W., & Hendricks Franssen, H.-J. (2012). Parameter estimation by ensemble Kalman filters
+with transformed data: Approach and application to hydraulic tomography. Water Resources Research, 48 (4), -.
+https://doi.org/10.1029/2011WR01046
 
 A MATLAB program generates synthetic 'true' measurement data and results for 4 different groundwater models, using a
 50x50 m 2D grid:
