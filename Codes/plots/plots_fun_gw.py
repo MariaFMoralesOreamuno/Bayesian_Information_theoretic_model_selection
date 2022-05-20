@@ -35,17 +35,23 @@ def plot_bar(axis, x, y, index, uncertainty, value_label=False, isolate=False):
     x_loc = np.arange(1, len(x) + 1)
 
     # get colors:
-    edge_colors = []
-    line_w = []
+    # edge_colors = []
+    # line_w = []
+    # for i in range(0, len(x)):
+    #     if 'f' in x[i] and isolate:  # Only flow model has "f" in model name
+    #         edge_colors.append('red')
+    #         line_w.append(2)
+    #     else:
+    #         edge_colors.append('none')
+    #         line_w.append(0)
+    # bar_plot = axis.bar(x_loc, y, width=width, color=model_colors[index], edgecolor=edge_colors, linewidth=line_w)
+
     for i in range(0, len(x)):
         if 'f' in x[i] and isolate:  # Only flow model has "f" in model name
-            edge_colors.append('red')
-            line_w.append(2)
+            tr = 0.25
         else:
-            edge_colors.append('none')
-            line_w.append(0)
-
-    bar_plot = axis.bar(x_loc, y, width=width, color=model_colors[index], edgecolor=edge_colors, linewidth=line_w)
+            tr = 1
+        bar_plot = axis.bar(x_loc[i], y[i], width=width, color=model_colors[index], alpha=tr)
 
     axis.set_xlabel("Model")
     if uncertainty:
@@ -271,7 +277,6 @@ def plot_stacked_score_calculation_gw(data, ce, labels, save_name):
     plt.savefig(save_name)
 
     plt.show(block=False)
-    stop = 1
 
 
 def plot_bme_weights_gw(data, x, stack_labels, save_name):
