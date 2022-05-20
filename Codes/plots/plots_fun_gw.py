@@ -145,6 +145,7 @@ def plot_scores_bar_gw(score_array, model_names, save_name, uncertainty):
     plt.margins(y=0.5, tight=True)
 
     # Save plot:
+
     plt.savefig(save_name)
 
     # Print
@@ -153,14 +154,14 @@ def plot_scores_bar_gw(score_array, model_names, save_name, uncertainty):
 
 def plot_individual_gw_scores(score_array, model_names, save_name, uncertainty):
     """
-        Function plots each BMS score for each model as individual bar graphs.
+        Function plots each BMS score for each model as individual bar graphs. 
 
         Args:
         ----------
         :param score_array: array with scores [MxS] where S=number of scores (4) and M = number of models. The score order
         is: BME, NNCE, RE, IE
         :param model_names: Array with shape [1xM] with model names, as strings
-        :param save_name: file path where to save each resulting figure
+        :param save_name: file path where to save the resulting figure
         :param uncertainty: boolean, if true it plots -log(BME) and NNCE, if false it plots BME and ELPD
         ----------
         :return: Save plots (no return)
@@ -205,10 +206,10 @@ def plot_individual_gw_scores(score_array, model_names, save_name, uncertainty):
 
         # Save plot:
         if uncertainty:
-            save_name = os.path.join(f'{save_name}_{score_list[i]}.eps')
+            sn = os.path.join(f'{save_name}_{score_list[i]}.pdf')
         else:
-            save_name = os.path.join(f'{save_name}_{score_list_2[i]}.eps')
-        plt.savefig(save_name)
+            sn = os.path.join(f'{save_name}_{score_list_2[i]}.pdf')
+        plt.savefig(sn)
 
         # Print
         plt.show(block=False)
