@@ -106,10 +106,10 @@ path_Y = r'' + os.path.abspath(r'../Input/MATLAB_GW/Y_true_fest.mat')
 path_true_sol = r'' + os.path.abspath(r'../Input/MATLAB_GW/true_solution_fest.mat')
 
 # Model runs 1e6 -----------------------------------------------------------------------------------------------
-path_hm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/homogenous_model_final.mat')
-path_zm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/5_zoned_model_final.mat')
-path_zm2 = r'' + os.path.abspath(r'../Input/Python_GW/1e6/9_zoned_model_final.mat')
-path_gm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/geostatistical_model_final.mat')
+path_hm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/homogenous_model.mat')
+path_zm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/5_zoned_model.mat')
+path_zm2 = r'' + os.path.abspath(r'../Input/Python_GW/1e6/9_zoned_model.mat')
+path_gm = r'' + os.path.abspath(r'../Input/Python_GW/1e6/geostatistical_model.mat')
 
 # Path for similarity analysis data: ---------------------------------------------------------------------------
 path_bmj_hm = r'' + os.path.abspath(r'../Input/Python_GW/1e3/homogenous_model.mat')
@@ -307,7 +307,7 @@ plot_bme_weights_gw(bme_weights, np.array(['']), np.delete(model_name, 2), plot_
 # ------------------------------------------ Plots --------------------------------------------------------------- #
 logger.info("Plotting BMS results for groundwater models")
 # 1. Plot all scores in same plot:
-plot_name = os.path.join(results_path, 'BMS_scores_GWM.eps')
+plot_name = os.path.join(results_path, 'BMS_scores_GWM.pdf')
 if num_models > 3:
     plot_scores_bar_gw(model_scores_plot, reduced_model_name, plot_name, False)
 else:
@@ -357,9 +357,9 @@ for i in range(0, int(len(transport_meas_type)*n_points)):
     else:
         n = n+1
 
-# 5. Plot likelihoods (post and prior)
-plot_name = os.path.join(results_path, "GW_likelihoods.eps")
-plot_likelihoods_gw(model_runs, plot_name)
+# # 5. Plot likelihoods (post and prior)
+# plot_name = os.path.join(results_path, "GW_likelihoods.eps")
+# plot_likelihoods_gw(model_runs, plot_name)
 
 
 # ------------------------------------------------------------------------------------------------------------------ #
@@ -403,20 +403,34 @@ logger.info("Running Bayesian model similarity analysis on groundwater models")
 bmj_total = BMJ(n_points, Nd, model_runs, true_synthetic_models)
 bmj_total.run_bmj()
 
+# Create lists to plot
+d_list = [bmj_total.logBME_CM.copy(), bmj_total.NNCE_CM.copy(), bmj_total.RE_CM, bmj_total.IE_CM]
+d_n_list = [bmj_total.BME_norm.copy(), bmj_total.NNCE_norm.copy(), bmj_total.RE_norm, bmj_total.IE_norm]
+
+# Remove flow model values from BME and ELPD (comment out if not necessary to remove)------------------------
+selector = [x for x in range(num_models) if x != 2]
+d_list[0][selector, 2] = np.nan
+d_list[1][selector, 2] = np.nan
+
+d_n_list[0][selector, 2] = np.nan
+d_n_list[1][selector, 2] = np.nan
+# -----------------------------------------------------------------------------------------------------------
+
 logger.info("Plotting Bayesian model similarity results for groundwater models")
 plot_name = os.path.join(results_path, "BMJ_ConfusionMatrix_GW.eps")
-d_list = [bmj_total.logBME_CM, bmj_total.NNCE_CM, bmj_total.RE_CM, bmj_total.IE_CM]
 plot_confusion_matrix_all_scores(d_list, reduced_model_name, plot_name, uncertainty=False, data_type=1,
                                  compat_models=False)
 
 plot_name = os.path.join(results_path, "BMJ_NormConfusionMatrix_GW.eps")
-d_n_list = [bmj_total.BME_norm, bmj_total.NNCE_norm, bmj_total.RE_norm, bmj_total.IE_norm]
 plot_confusion_matrix_all_scores(d_n_list, reduced_model_name, plot_name, uncertainty=False, data_type=3)
 
 plot_name = os.path.join(results_path, "BMJ_BMAConfusionMatrix_GW.eps")
 d_list_bme = [bmj_total.BME_CM]
 plot_confusion_matrix(d_list_bme, reduced_model_name, 'BME', plot_name, compat_models=False)
 
+# Save results to .txt
+d_list = [bmj_total.logBME_CM, bmj_total.NNCE_CM, bmj_total.RE_CM, bmj_total.IE_CM]
+d_n_list = [bmj_total.BME_norm, bmj_total.NNCE_norm, bmj_total.RE_norm, bmj_total.IE_norm]
 for i in range(0, len(d_list)):
     save_name = os.path.join(results_path, 'runs', f"BMJ_{score_list[i]}.txt")
     save_results_txt(d_list[i], model_name, save_name, col_names=model_name)
