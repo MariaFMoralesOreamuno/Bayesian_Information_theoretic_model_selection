@@ -149,7 +149,69 @@ def plot_scores_bar_gw(score_array, model_names, save_name, uncertainty):
 
     # Print
     plt.show(block=False)
-    stop = 1
+
+
+def plot_individual_gw_scores(score_array, model_names, save_name, uncertainty):
+    """
+        Function plots each BMS score for each model as individual bar graphs.
+
+        Args:
+        ----------
+        :param score_array: array with scores [MxS] where S=number of scores (4) and M = number of models. The score order
+        is: BME, NNCE, RE, IE
+        :param model_names: Array with shape [1xM] with model names, as strings
+        :param save_name: file path where to save each resulting figure
+        :param uncertainty: boolean, if true it plots -log(BME) and NNCE, if false it plots BME and ELPD
+        ----------
+        :return: Save plots (no return)
+
+        Note: function calls another function to generate the bar graphs in each loop.
+        Note: the flow model is singled out for BME and NNCE values, to highlight the inadequacy of said scores in this
+        case
+        """
+    # Loop through each score
+    for i in range(0, score_array.shape[1]):
+        fig, p = plt.subplots(1, figsize=plot_size(fraction=0.75))  # Each plot will be half a LaTex page
+
+        # Extract score data
+        # If geostatistical model is removed:
+        if i == score_array.shape[1]-1 and score_array[score_array.shape[0]-1, i] == 0:
+            data = score_array[:-1, i]
+            mn = model_names[:-1]
+        else:
+            data = score_array[:, i]
+            mn = model_names
+
+        # if data is not to be in uncertainty
+        if not uncertainty and (i == 0 or i == 1):
+            data = -1 * data
+
+        # Determine whether to isolate flow model:
+        if i < 2:
+            isolate = True
+        else:
+            isolate = False
+
+        p = plot_bar(p, mn, data, i, uncertainty, isolate=isolate)
+        if i < score_array.shape[1] / 2:
+            p.set_xlabel("")
+        p.set_title(subplot_titles[i], loc='left', fontweight='bold')
+        p.grid(b=True, which='major', axis='y', color='lightgrey', linestyle='--')
+        # p.text(1, 1, subplot_titles[i])
+
+        # Format:
+        plt.subplots_adjust(top=0.92, bottom=0.1, wspace=0.45, hspace=0.3)
+        plt.margins(y=0.5, tight=True)
+
+        # Save plot:
+        if uncertainty:
+            save_name = os.path.join(f'{save_name}_{score_list[i]}.eps')
+        else:
+            save_name = os.path.join(f'{save_name}_{score_list_2[i]}.eps')
+        plt.savefig(save_name)
+
+        # Print
+        plt.show(block=False)
 
 
 def plot_stacked_score_calculation_gw(data, ce, labels, save_name):

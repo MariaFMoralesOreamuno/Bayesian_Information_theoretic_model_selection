@@ -317,13 +317,14 @@ else:
 # 1.1 Remove geostatistical model IE data from results and plot                 #
 plot_name = os.path.join(results_path, "BMS_scores_GWM_4M.eps")                 #
 model_scores_mod = np.copy(model_scores_plot)                                   #
-model_scores_mod[-1, 3] = 0.0001                                                #
+model_scores_mod[-1, 3] = 0                                              #
 plot_scores_bar_gw(model_scores_mod, reduced_model_name, plot_name, False)      #
 # ----------------------------------------------------------------------------- #
 
 # 1.2 Plot individual scores
 plot_name = os.path.join(results_path, "BMS_score_GWM_")
-plot_individual_scores(model_scores_mod, reduced_model_name, plot_name, uncertainty=False)
+plot_individual_gw_scores(model_scores_mod, reduced_model_name, plot_name, False)
+# plot_individual_scores(model_scores_mod, reduced_model_name, plot_name, uncertainty=False)
 
 # 2. Plot score visualization
 # plot_name = os.path.join(results_path, 'BMS_Score_Calculation_GWM.eps')
@@ -336,7 +337,7 @@ plot_stacked_score_calculation_gw(model_scores_plot, ce_values, model_name, plot
 plot_name = os.path.join(results_path, "BMS_stacked_score_relationship_GW_4M.eps")    #
 
 ce_mod = np.copy(ce_values)                                                           #
-ce_mod[-1, 0] = 0.0001                                                                #
+ce_mod[-1, 0] = 0                                                                     #
 plot_stacked_score_calculation_gw(model_scores_mod, ce_mod, model_name, plot_name)    #
 # ----------------------------------------------------------------------------------- #
 
