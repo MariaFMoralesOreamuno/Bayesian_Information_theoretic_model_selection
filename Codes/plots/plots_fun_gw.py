@@ -732,7 +732,7 @@ def plot_synthetic_gw(path_k, path_sol, point_loc, num_pts, save_path):
 
     ax.set_aspect(1.0 / ax.get_data_ratio() * 1)
 
-    save_name = os.path.join(save_path, 'synthetic_logK.pdf')
+    save_name = os.path.join(save_path, 'synthetic_logK.eps')
     plt.savefig(save_name)
     plt.show(block=False)
 
@@ -762,7 +762,7 @@ def plot_synthetic_gw(path_k, path_sol, point_loc, num_pts, save_path):
 
     plt.subplots_adjust(top=0.93, bottom=0.1, wspace=0.55, hspace=0.15)
 
-    save_name = os.path.join(save_path, 'synthetic_gw_h_c.pdf')
+    save_name = os.path.join(save_path, 'synthetic_gw_h_c.eps')
     plt.savefig(save_name)
 
     plt.show(block=False)

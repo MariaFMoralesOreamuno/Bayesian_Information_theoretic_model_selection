@@ -279,9 +279,9 @@ def plot_individual_scores(score_array, model_names, file_path, uncertainty):
         plt.tight_layout()
 
         if uncertainty:
-            save_name = os.path.join(f'{file_path}_{score_list[i]}.pdf')
+            save_name = os.path.join(f'{file_path}_{score_list[i]}.eps')
         else:
-            save_name = os.path.join(f'{file_path}_{score_list_2[i]}.pdf')
+            save_name = os.path.join(f'{file_path}_{score_list_2[i]}.eps')
         plt.savefig(save_name)
 
         plt.show(block=False)
@@ -1411,7 +1411,7 @@ def plot_bmj_diagonal(list_scores, num_dp, model_names, path):
         for n, n_array in enumerate(s_array):  # loop through each number of data points (array in 3D array)
             results_list[n, :, s] = np.diagonal(n_array)
 
-    save_name = path + "AM_EvolvingDiagonal_BMJ.pdf"
+    save_name = path + "AM_EvolvingDiagonal_BMJ.eps"
     plot_evolving_values(results_list, num_dp, model_names, save_name)
 
 

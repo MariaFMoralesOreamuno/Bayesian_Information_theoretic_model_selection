@@ -220,14 +220,14 @@ Nd = hm_bmj_mat['n_reali'][0, 0]
 logger.info("Plotting synthetic true run and zone classification for zoned models")
 plot_synthetic_gw(path_Y, path_true_sol, measurement_mat['meas_loc'], n_points, results_path)
 
-plot_name = os.path.join(results_path, "Zones.pdf")
+plot_name = os.path.join(results_path, "Zones.eps")
 plot_diff_zones(path_Y, [zm_mat['zone_grid'], zm9_mat['zone_grid']], measurement_mat['meas_loc'], plot_name)
 
 # # Plot individual zone classification grid:
-# plot_name = os.path.join(results_path, 'zoned_model_5.pdf')
+# plot_name = os.path.join(results_path, 'zoned_model_5.eps')
 # plot_zones(path_Y, zm_mat['zone_grid'], measurement_mat['meas_loc'], plot_name)
 #
-# plot_name = os.path.join(results_path, 'zoned_model_9.pdf')
+# plot_name = os.path.join(results_path, 'zoned_model_9.eps')
 # plot_zones(path_Y, zm9_mat['zone_grid'], measurement_mat['meas_loc'], plot_name)
 
 
@@ -300,14 +300,14 @@ save_results_txt(model_scores_plot, model_name, txt_name)
 # Calculate BME Weights ------------------------------------------------------------------------------------------ #
 bme_transport = np.delete(bme_values, 2, axis=0)
 bme_weights = BayesInference.calculate_model_weight(bme_transport)
-plot_name = os.path.join(results_path, "BME_weights.pdf")
+plot_name = os.path.join(results_path, "BME_weights.eps")
 plot_bme_weights_gw(bme_weights, np.array(['']), np.delete(model_name, 2), plot_name)
 
 
 # ------------------------------------------ Plots --------------------------------------------------------------- #
 logger.info("Plotting BMS results for groundwater models")
 # 1. Plot all scores in same plot:
-plot_name = os.path.join(results_path, 'BMS_scores_GWM.pdf')
+plot_name = os.path.join(results_path, 'BMS_scores_GWM.eps')
 if num_models > 3:
     plot_scores_bar_gw(model_scores_plot, reduced_model_name, plot_name, False)
 else:
@@ -315,7 +315,7 @@ else:
 
 # ----------------------------------------------------------------------------- #
 # 1.1 Remove geostatistical model IE data from results and plot                 #
-plot_name = os.path.join(results_path, "BMS_scores_GWM_4M.pdf")                 #
+plot_name = os.path.join(results_path, "BMS_scores_GWM_4M.eps")                 #
 model_scores_mod = np.copy(model_scores_plot)                                   #
 model_scores_mod[-1, 3] = 0.0001                                                #
 plot_scores_bar_gw(model_scores_mod, reduced_model_name, plot_name, False)      #
@@ -326,14 +326,14 @@ plot_name = os.path.join(results_path, "BMS_score_GWM_")
 plot_individual_scores(model_scores_mod, reduced_model_name, plot_name, uncertainty=False)
 
 # 2. Plot score visualization
-# plot_name = os.path.join(results_path, 'BMS_Score_Calculation_GWM.pdf')
+# plot_name = os.path.join(results_path, 'BMS_Score_Calculation_GWM.eps')
 # plot_scores_calculations(model_scores_plot, ce_values, model_name, plot_name)
-plot_name = os.path.join(results_path, "BMS_stacked_score_relationship_GW.pdf")
+plot_name = os.path.join(results_path, "BMS_stacked_score_relationship_GW.eps")
 plot_stacked_score_calculation_gw(model_scores_plot, ce_values, model_name, plot_name)
 
 # ----------------------------------------------------------------------------------- #
 # 2.1 Remove geostatistical model IE data from results and plot                       #
-plot_name = os.path.join(results_path, "BMS_stacked_score_relationship_GW_4M.pdf")    #
+plot_name = os.path.join(results_path, "BMS_stacked_score_relationship_GW_4M.eps")    #
 
 ce_mod = np.copy(ce_values)                                                           #
 ce_mod[-1, 0] = 0.0001                                                                #
@@ -341,14 +341,14 @@ plot_stacked_score_calculation_gw(model_scores_mod, ce_mod, model_name, plot_nam
 # ----------------------------------------------------------------------------------- #
 
 # 3. Plot prior and posterior parameter distributions for Model Selection (MS)
-plot_name = os.path.join(results_path, "Prior_Post_GWM.pdf")
+plot_name = os.path.join(results_path, "Prior_Post_GWM.eps")
 plot_prior_post_gw(model_runs[0:-1], plot_name, share=False)
 
 # 4. Plot outputs
 n = 0
 for i in range(0, int(len(transport_meas_type)*n_points)):
     m_type = model_runs[0].measurement_data.meas_type[i].replace(" ", "")
-    plot_name = os.path.join(results_path, f'BMS_output_{m_type}_P{n}.pdf')
+    plot_name = os.path.join(results_path, f'BMS_output_{m_type}_P{n}.eps')
     plot_outputs_gw(model_runs, plot_name, model_runs[0].measurement_data.meas_type[i], dp=i)
 
     if (i+1) % n_points == 0:
@@ -357,7 +357,7 @@ for i in range(0, int(len(transport_meas_type)*n_points)):
         n = n+1
 
 # 5. Plot likelihoods (post and prior)
-plot_name = os.path.join(results_path, "GW_likelihoods.pdf")
+plot_name = os.path.join(results_path, "GW_likelihoods.eps")
 plot_likelihoods_gw(model_runs, plot_name)
 
 
@@ -389,7 +389,7 @@ for modelID in range(0, num_models):
 # n = 0
 # for i in range(0, int(len(transport_meas_type)*n_points)):
 #     m_type = model_runs[0].measurement_data.meas_type[i].replace(" ", "")
-#     plot_name = os.path.join(results_path, f'BMS_BMJ_output_{m_type}_P{n}.pdf')
+#     plot_name = os.path.join(results_path, f'BMS_BMJ_output_{m_type}_P{n}.eps')
 #     plot_outputs_bmj_gw(true_synthetic_models, model_runs, plot_name, model_runs[0].measurement_data.meas_type[i],
 #                         dp=i)
 #     if (i+1) % n_points == 0:
@@ -403,16 +403,16 @@ bmj_total = BMJ(n_points, Nd, model_runs, true_synthetic_models)
 bmj_total.run_bmj()
 
 logger.info("Plotting Bayesian model similarity results for groundwater models")
-plot_name = os.path.join(results_path, "BMJ_ConfusionMatrix_GW.pdf")
+plot_name = os.path.join(results_path, "BMJ_ConfusionMatrix_GW.eps")
 d_list = [bmj_total.logBME_CM, bmj_total.NNCE_CM, bmj_total.RE_CM, bmj_total.IE_CM]
 plot_confusion_matrix_all_scores(d_list, reduced_model_name, plot_name, uncertainty=False, data_type=1,
                                  compat_models=False)
 
-plot_name = os.path.join(results_path, "BMJ_NormConfusionMatrix_GW.pdf")
+plot_name = os.path.join(results_path, "BMJ_NormConfusionMatrix_GW.eps")
 d_n_list = [bmj_total.BME_norm, bmj_total.NNCE_norm, bmj_total.RE_norm, bmj_total.IE_norm]
 plot_confusion_matrix_all_scores(d_n_list, reduced_model_name, plot_name, uncertainty=False, data_type=3)
 
-plot_name = os.path.join(results_path, "BMJ_BMAConfusionMatrix_GW.pdf")
+plot_name = os.path.join(results_path, "BMJ_BMAConfusionMatrix_GW.eps")
 d_list_bme = [bmj_total.BME_CM]
 plot_confusion_matrix(d_list_bme, reduced_model_name, 'BME', plot_name, compat_models=False)
 
