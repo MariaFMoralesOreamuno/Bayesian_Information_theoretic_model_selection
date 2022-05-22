@@ -307,7 +307,7 @@ plot_bme_weights_gw(bme_weights, np.array(['']), np.delete(model_name, 2), plot_
 # ------------------------------------------ Plots --------------------------------------------------------------- #
 logger.info("Plotting BMS results for groundwater models")
 # 1. Plot all scores in same plot:
-plot_name = os.path.join(results_path, 'BMS_scores_GWM.pdf')
+plot_name = os.path.join(results_path, 'BMS_scores_GWM' + ext)
 if num_models > 3:
     plot_scores_bar_gw(model_scores_plot, reduced_model_name, plot_name, False)
 else:
