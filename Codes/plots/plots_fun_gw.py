@@ -11,6 +11,8 @@ the thesis "Bayesian and Information-Theoretic scores for Model Similarity Analy
 from plots.plots_fun import *
 from config import *
 
+ext = ".pdf"
+
 
 # General plotting functions
 def plot_bar(axis, x, y, index, uncertainty, value_label=False, isolate=False):
@@ -194,21 +196,21 @@ def plot_individual_gw_scores(score_array, model_names, save_name, uncertainty):
             isolate = False
 
         p = plot_bar(p, mn, data, i, uncertainty, isolate=isolate)
-        if i < score_array.shape[1] / 2:
-            p.set_xlabel("")
+        # if i < score_array.shape[1] / 2:
+        #     p.set_xlabel("")
         p.set_title(subplot_titles[i], loc='left', fontweight='bold')
         p.grid(b=True, which='major', axis='y', color='lightgrey', linestyle='--')
         # p.text(1, 1, subplot_titles[i])
 
         # Format:
-        plt.subplots_adjust(top=0.92, bottom=0.1, wspace=0.45, hspace=0.3)
+        plt.subplots_adjust(top=0.92, bottom=0.15, wspace=0.45, hspace=0.3)
         plt.margins(y=0.5, tight=True)
 
         # Save plot:
         if uncertainty:
-            sn = os.path.join(f'{save_name}_{score_list[i]}.pdf')
+            sn = os.path.join(f'{save_name}_{score_list[i]}' + ext)
         else:
-            sn = os.path.join(f'{save_name}_{score_list_2[i]}.pdf')
+            sn = os.path.join(f'{save_name}_{score_list_2[i]}' + ext)
         plt.savefig(sn)
 
         # Print
@@ -800,7 +802,7 @@ def plot_synthetic_gw(path_k, path_sol, point_loc, num_pts, save_path):
 
     ax.set_aspect(1.0 / ax.get_data_ratio() * 1)
 
-    save_name = os.path.join(save_path, 'synthetic_logK.eps')
+    save_name = os.path.join(save_path, 'synthetic_logK' + ext)
     plt.savefig(save_name)
     plt.show(block=False)
 
@@ -830,7 +832,7 @@ def plot_synthetic_gw(path_k, path_sol, point_loc, num_pts, save_path):
 
     plt.subplots_adjust(top=0.93, bottom=0.1, wspace=0.55, hspace=0.15)
 
-    save_name = os.path.join(save_path, 'synthetic_gw_h_c.eps')
+    save_name = os.path.join(save_path, 'synthetic_gw_h_c' + ext)
     plt.savefig(save_name)
 
     plt.show(block=False)
