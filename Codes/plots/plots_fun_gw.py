@@ -6,12 +6,16 @@ Last update: 08/12/2021
 
 Module contains the functions to plot and save different results specifically for the groundwater models, as part of
 the thesis "Bayesian and Information-Theoretic scores for Model Similarity Analysis".
+
+Variable ext determines the extension for all plots, including those whose path names are initialized in the main
+"main_groundwater_model.py" file. 
 """
 
 from plots.plots_fun import *
 from config import *
 
-ext = ".pdf"
+# Change extension for all plots, as needed.
+ext = ".pdf"  # or .eps
 
 
 # General plotting functions
