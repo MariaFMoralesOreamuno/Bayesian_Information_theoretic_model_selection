@@ -20,6 +20,7 @@ width = 0.75
 param_colors = ['royalblue', 'gold', 'mediumseagreen', 'coral', 'olive', 'red', 'yellow', 'black', 'green', 'pink']
 
 model_colors = ['#2c7bb6', '#fee090', '#fc8d59', '#d73027', '#91bfdb', '#e0f3f8']
+model_transp = ["#abd9e9", "#fff6de"]  # #abd9e9  #e0f3f8
 
 # LaTex document properties
 textwidth = 448

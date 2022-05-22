@@ -8,14 +8,14 @@ Module contains the functions to plot and save different results specifically fo
 the thesis "Bayesian and Information-Theoretic scores for Model Similarity Analysis".
 
 Variable ext determines the extension for all plots, including those whose path names are initialized in the main
-"main_groundwater_model.py" file. 
+"main_groundwater_model.py" file.
 """
 
 from plots.plots_fun import *
 from config import *
 
 # Change extension for all plots, as needed.
-ext = ".pdf"  # or .eps
+ext = ".eps"  # e.g.: .pdf or .eps
 
 
 # General plotting functions
@@ -51,13 +51,16 @@ def plot_bar(axis, x, y, index, uncertainty, value_label=False, isolate=False):
     #         edge_colors.append('none')
     #         line_w.append(0)
     # bar_plot = axis.bar(x_loc, y, width=width, color=model_colors[index], edgecolor=edge_colors, linewidth=line_w)
-
+    mc = []
     for i in range(0, len(x)):
         if 'f' in x[i] and isolate:  # Only flow model has "f" in model name
             tr = 0.25
+            mc.append(model_transp[index])
         else:
             tr = 1
-        bar_plot = axis.bar(x_loc[i], y[i], width=width, color=model_colors[index], alpha=tr)
+            mc.append(model_colors[index])
+        # bar_plot = axis.bar(x_loc[i], y[i], width=width, color=model_colors[index], alpha=tr)  # doesn't work for .eps
+        bar_plot = axis.bar(x_loc[i], y[i], width=width, color=mc[i])
 
     axis.set_xlabel("Model")
     if uncertainty:
