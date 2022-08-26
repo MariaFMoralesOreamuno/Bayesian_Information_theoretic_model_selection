@@ -1,6 +1,7 @@
 """
-Module with plotting functions for the main_gw_errors.py and main_am_trans.py program, for all modules that involve
-the analysis of Bayesian and information theoretic scores with increasing variable, e.g. number parameters, error value,
+Module with plotting functions for the main_gw_errors.py and main_am_trends.py program, for all modules that involve
+the analysis of Bayesian and information theoretic scores with increasing variable values, e.g. number of parameters,
+error values, data set size.
 etc.
 """
 from plots.plots_fun import *
@@ -82,7 +83,6 @@ def plot_outputs_gw_trends(model_list, save_name, m_type, dp=0):
     plt.savefig(save_name)
 
     plt.show(block=False)
-    x = 1
 
 
 def plot_changing_variable(size_array, model_name, x_values, save_name, y_label, x_label):
@@ -146,7 +146,6 @@ def plot_changing_variable(size_array, model_name, x_values, save_name, y_label,
     plt.savefig(save_name)
 
     plt.show(block=False)
-    x = 1
 
 
 def plot_evolving_scores(data_array, x_values, model_names, save_name, uncertainty, x_label):
@@ -226,8 +225,4 @@ def plot_evolving_scores(data_array, x_values, model_names, save_name, uncertain
     plt.savefig(save_name)
 
     plt.show(block=False)
-    x = 1
-
-
-
 

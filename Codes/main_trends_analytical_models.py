@@ -4,20 +4,33 @@ Author: María Fernanda Morales Oreamuno
 Created: 06/10/2021
 Modified: 08/12/2021
 
-Program runs the Analytical Model, either for scenario 1 (multiple priors) or 2 (multiple equations), to see how the
-scores vary when a given variable is changed, for example: measurement error or number of parameters.
+Program runs the methodology for Bayesian and information theoretic scores for model selection and model similarity
+analysis for an analytical test case, based on the equation used in:
+* Oladyshkin, S. and Nowak, W. The Connection between Bayesian Inference and Information Theory for Model
+  Selection, Information Gain and Experimental Design. Entropy, 21(11), 1081, 2019.
+
+Program runs the analytical model scenarios from "main_analytical_models.py", either for scenario 1 (multiple priors) or
+scenario 2 (multiple equations), to see how the scores vary when a given variable is changed, for example:
+a) measurement error or b)number of parameters.
 
 
 User input:
 ------------------------------------------------
 results_path: str, path where the plots/results are to be saved
-MC_size: int, number of Monte Carlo realizations
+MC_size:      int, number of Monte Carlo realizations
+-scenario_1:  bool, True to run scenario 1, and False to run scenario 2
 
--scenario_1: bool, True to run scenario 1, and False to run scenario 2
 -var_error : bool, True to run for different error values
     * err_vals: list of floats/ints, with the measurement error values with which to run the models
+
 -var_num_params: bool, True to run for different number of model parameters
     * num_p: list of int, with number of parameters to run the models for (minimum 2 parameters must be set)
+
+Based on the following papers:
+    * Oladyshkin, S. and Nowak, W. The Connection between Bayesian Inference and Information Theory for Model
+        Selection, Information Gain and Experimental Design. Entropy, 21(11), 1081, 2019.
+    * Schöniger, A., Illman, W. A., Wöhling, T., & Nowak, W. (2015). Finding the right balance between groundwater model
+        complexity and experimental effort via Bayesian model selection. Journal of Hydrology, 531, 96-110.
 """
 
 from Analytical_Functions.analytical_functions import *
@@ -27,7 +40,9 @@ from Bayesian_Inference.bayes_inference import *
 from plots.plot_trends import *
 
 
-# -------------------------------------------- USER INPUT ------------------------------------------------------ #
+# ----------------------------------------------------------------------------------------------------------------- #
+# ---------------------------------------- INPUT DATA ------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------------------------- #
 
 results_path = r'' + os.path.abspath(r'..\Results')
 
@@ -35,10 +50,6 @@ MC_size = 1_000_000  # number of MC runs
 
 # Set scenario:
 scenario_1 = True
-
-# Set which values to change, and how (list with values)
-var_num_mp = False
-num_dp = [1, 5, 8, 10]  # Array with number of data points to analyze in each loop (for multiple data points)
 
 var_error = True
 err_vals = [5, 2, 1, 0.1, 0.01]
@@ -63,8 +74,8 @@ param_values = np.full((1, num_param), 0)  # parameter values to evaluate 'real'
 # ------------------------------------------------------------------------------------------------------------------ #
 
 # Array with information on parameter distribution [name, parameters]
-rg2 = 3
-var_n = 1
+rg2 = 3      # limits for parameter distribution 2
+var_n = 1    # variance for parameter distribution 3
 parameter_info_1 = [['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5],
                     ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5]]
 
@@ -77,8 +88,8 @@ parameter_info_3 = [['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n], 
 
 
 # extra (in case one wants to add additional models
-mn = 0
-var_n = 0.1
+mn = 1       # mean
+var_n = 2    # variance
 parameter_info_4 = [['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n],
                     ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n]]
 
@@ -116,12 +127,12 @@ if not os.path.exists(os.path.join(results_path, "runs")):
 # Run BMS with varying error value --------------------------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------ #
 
-model_scores_plot = np.full((len(err_vals), num_models, 4), 0.0)  # array to save scores to plot
-bme_values = np.full((num_models, len(err_vals)), 0.0)            # Array to save original BME values
-ce_values = np.full((num_models, len(err_vals)), 0.0)             # array to save expected posterior density (for plots)
-post_size = np.full((num_models, len(err_vals)), 0)
-
 if var_error:
+    model_scores_plot = np.full((len(err_vals), num_models, 4), 0.0)  # array to save scores to plot
+    bme_values = np.full((num_models, len(err_vals)), 0.0)  # Array to save original BME values
+    ce_values = np.full((num_models, len(err_vals)), 0.0)  # array to save expected posterior density (for plots)
+    post_size = np.full((num_models, len(err_vals)), 0)
+
     logger.info(f"Running BMS for analytical model scenario {suffix} for increasing measurement error values")
     for e in trange(0, len(err_vals), desc=f"Running for each error value"):
         # set error value

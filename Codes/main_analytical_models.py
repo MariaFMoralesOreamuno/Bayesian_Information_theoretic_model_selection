@@ -5,13 +5,18 @@ Date created: 05/11/2021
 Last modified: 12/12/2021
 
 Program runs the methodology for Bayesian and information theoretic scores for model selection and model similarity
-analysis, as part of the master thesis: 'Bayesian and information theoretic scores for model similarity Analysis'
+analysis for an analytical test case, based on the equation used in:
+* Oladyshkin, S. and Nowak, W. The Connection between Bayesian Inference and Information Theory for Model
+  Selection, Information Gain and Experimental Design. Entropy, 21(11), 1081, 2019.
 
 Runs the methodology for 2 possible model comparison scenarios:
 * Scenario 1: 3 competing models, all based on the same equation and different prior probability distributions
 which are U[-5,5], U[-3,3], N[0,1].
 * Scenario 2: 5 competing models, all comprised of different equations and with the same prior probability distribution
 (Uniform[-5,5] for all parameters, for all 5 models)
+
+Additionally, the program gives the option to run the scenario for different number of observations (data set sizes),
+to compare/analyze the behaviour of the different scores with increasing data set size.
 
 Based on the following papers:
     * Oladyshkin, S. and Nowak, W. The Connection between Bayesian Inference and Information Theory for Model
@@ -21,17 +26,18 @@ Based on the following papers:
 
 Input:
 -----------------
-results path: path were to save the model results (plots, .txt summaries, etc).
+- results path: path were to save the model results (plots, .txt summaries, etc).
     A folder will be created within this folder depending on the scenario being run
-MC_size: number of Monte Carlo simulations for the model selection analysis
-Nd: number of Monte Carlo simulations for the data generating models in the BMJ analysis
-scenario_1: boolean, True if scenario 1 is to be run, False if Scenario 2 is to be run
+- MC_size: number of Monte Carlo simulations for the model selection analysis
+- Nd: number of Monte Carlo simulations for the data generating models in the BMJ analysis
+- scenario_1: boolean, True if Scenario 1 is to be run, False if Scenario 2 is to be run
 
-Synthetic true model data
-----------------------------------------------
-num_measurement_points: number of data points to consider
-num_param: number of uncertain parameters for all models (all will have the same number of uncertain parameters)
-measurement_error_val: measurement error value for all measurement points
+- num_measurement_pts: int, number of data points to consider
+- num_param: int, number of uncertain parameters for all models (all will have the same number of uncertain parameters)
+- measurement_error_val: measurement error value for all measurement points
+
+- var_num_mp: bool, True to run for different number of observations
+    * num_dp: list, with the number of observations (data points) to consider in each iteration (loop)
 """
 from Analytical_Functions.analytical_functions import *
 from Bayesian_Inference.bayes_inference import *
@@ -41,13 +47,12 @@ from plots.results_fun import *
 
 # ----------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------- INPUT DATA ------------------------------------------------------------- #
-# --------------------------------------------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------------------------- #
 
 results_path = os.path.abspath(r'..\Results')
 
 MC_size = 1_000_000     # number of MC runs
 Nd = 1000             # Number of MC runs for the BMJ analysis, for the 'true' model runs
-num_dp = [1, 5, 8, 10]  # Array with number of data points to analyze in each loop (for multiple data points)
 
 # Set scenario:
 scenario_1 = True
@@ -57,9 +62,18 @@ num_measurement_pts = 10    # Number of data points
 num_param = 10              # number of uncertain parameters
 measurement_error_val = 2   # measurement error value for all data points
 
+# To run for different data set sizes:
+var_num_mp = True
+num_dp = [1, 5, 8, 10]  # Array with number of data points to analyze in each loop (for multiple data points)
+
+
+# ----------------------------------------------------------------------------------------------------------------- #
+# ---------------------------------- INITIALIZE CONSTANTS --------------------------------------------------------- #
+# ---------------------------------------------------------------------------------------------------------------- #
+
 # Parameter data ----------------------------------------------------------------------------------- #
-rg2 = 3
-var_n = 1
+rg2 = 3      # limits for parameter distribution 2
+var_n = 1    # variance for parameter distribution 3
 parameter_info_1 = [['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5],
                     ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5], ['uniform', -5, 5]]
 
@@ -70,14 +84,14 @@ parameter_info_2 = [['uniform', -rg2, rg2], ['uniform', -rg2, rg2], ['uniform', 
 parameter_info_3 = [['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n],
                     ['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n], ['norm', 0, var_n]]
 
-# extra (in case one wants to add additional models
-mn = 1
-var_n = 2
+# extra (in case one wants to add additional models)
+mn = 1       # mean
+var_n = 2    # variance
 parameter_info_4 = [['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n],
                     ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n], ['norm', mn, var_n],
                     ['norm', mn, var_n], ['norm', mn, var_n]]
 
-parameter_info = [parameter_info_1, parameter_info_2, parameter_info_3, parameter_info_4]
+parameter_info = [parameter_info_1, parameter_info_2, parameter_info_3]  # , parameter_info_4]
 param_names = ['U[-5,5]', 'U[-3,3]', 'N[0,1]']
 # --------------------------------------------------------------------------------------------------------------- #
 
@@ -101,6 +115,8 @@ if not os.path.exists(results_path):
 if not os.path.exists(os.path.join(results_path, "runs")):
     logger.info(f"Creating folder: {os.path.join(results_path, 'runs')}")
     os.makedirs(os.path.join(results_path, "runs"))
+# --------------------------------------------------------------------------------------------------------------- #
+
 
 # --------------------------------------------------------------------------------------------------------------- #
 # -------------------------------- Run synthetic true data ------------------------------------------------------ #
@@ -117,6 +133,7 @@ measurement_values = syn_model_run.evaluate_models()  # Evaluate model
 syn_data_set = MeasurementData(time_steps, measurement_values, measurement_error)
 syn_data_set.generate_cov_matrix()
 # --------------------------------------------------------------------------------------------------------------- #
+
 
 # --------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------- Generate Model Runs --------------------------------------------------- #
@@ -140,6 +157,8 @@ for m in range(0, num_models):
     output = CM.evaluate_models()
 
     competing_models.append(CM)
+# --------------------------------------------------------------------------------------------------------------- #
+
 
 # ------------------------------------------------------------------------------------------------------------------ #
 # --------------------------------------- Bayesian Model Selection-------------------------------------------------- #
@@ -221,113 +240,114 @@ plot_prior_post(model_runs, save_name)
 
 # ----------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------ Bayesian Model Selection  -------------------------------------------------- #
-# ---------------------------- With different calibration data set size ------------------------------------------- #
-logger.info(f"Running Bayesian model selection analysis (BMS) for different calibration data set size"
-            f" for scenario {suffix}.")
+# ---------------------------- With different calibration data set sizes ------------------------------------------ #
+if var_num_mp:
+    logger.info(f"Running Bayesian model selection analysis (BMS) for different calibration data set size"
+                f" for scenario {suffix}.")
 
-original_index = np.arange(0, num_measurement_pts, 1)  # Index values of total number of measurement points
+    original_index = np.arange(0, num_measurement_pts, 1)  # Index values of total number of measurement points
 
-# Create 3D arrays to save each score array of size (NxM) --> N: number of data point values, --> M: number of models
-results_mp = np.full((len(num_dp), num_models, 4), 0.0)
-results_bme_mp = np.full((num_models, len(num_dp)), 0.0)
-results_ce_mp = np.full((num_models, len(num_dp)), 0.0)
+    # Create 3D arrays to save each score array of size (NxM) --> N: number of data point values, M: number of models
+    results_mp = np.full((len(num_dp), num_models, 4), 0.0)
+    results_bme_mp = np.full((num_models, len(num_dp)), 0.0)
+    results_ce_mp = np.full((num_models, len(num_dp)), 0.0)
 
-results_models = np.empty((len(num_dp), len(model_runs)), dtype=object)
+    results_models = np.empty((len(num_dp), len(model_runs)), dtype=object)
 
-# Loop for each number of data points to analyze
-for n in range(0, len(num_dp)):
-    # Get all possible combinations of the given number of points:
-    combos = list(itertools.combinations(original_index, num_dp[n]))
+    # Loop for each number of data points to analyze
+    for n in range(0, len(num_dp)):
+        # Get all possible combinations of the given number of points:
+        combos = list(itertools.combinations(original_index, num_dp[n]))
 
-    # Loop through each combination and then through each model
-    score_results_c = np.full((len(combos), num_models, 4), 0.0)  # 3D array to save all results for 'n' data values
-    bme_results_c = np.full((num_models, len(combos)), 0.0)
+        # Loop through each combination and then through each model
+        score_results_c = np.full((len(combos), num_models, 4), 0.0)  # 3D array to save all results for 'n' data values
+        bme_results_c = np.full((num_models, len(combos)), 0.0)
 
-    # Loop through each combination
-    d = "Running for each {} measurement point combination".format(num_dp[n])
-    for c in tqdm(range(0, len(combos)), desc=d, unit='Comb.'):
-        combi = combos[c]
-        # ------------- Set synthetic measurement data: ------------- #
-        # Set values to send to synthetic class instance: filter original data to the indexes in "c"
-        f_loc, f_val, f_err = syn_data_set.filter_by_index(combi)
-        s_data = MeasurementData(f_loc, f_val, f_err)
-        s_data.generate_cov_matrix()
+        # Loop through each combination
+        d = "Running for each {} measurement point combination".format(num_dp[n])
+        for c in tqdm(range(0, len(combos)), desc=d, unit='Comb.'):
+            combi = combos[c]
+            # ------------- Set synthetic measurement data: ------------- #
+            # Set values to send to synthetic class instance: filter original data to the indexes in "c"
+            f_loc, f_val, f_err = syn_data_set.filter_by_index(combi)
+            s_data = MeasurementData(f_loc, f_val, f_err)
+            s_data.generate_cov_matrix()
 
-        # Loop through each model: here running through each original model instance run previously
-        for k, orig_model in enumerate(model_runs):
-            # 1. Get data from previously run models (previously run), filtering data by index
-            f_bi = BayesInference(s_data, orig_model.model_num)
-            f_bi.model_name = orig_model.model_name
+            # Loop through each model: here running through each original model instance run previously
+            for k, orig_model in enumerate(model_runs):
+                # 1. Get data from previously run models (previously run), filtering data by index
+                f_bi = BayesInference(s_data, orig_model.model_num)
+                f_bi.model_name = orig_model.model_name
 
-            # 2. Set prior
-            f_bi.prior = orig_model.prior  # Get from unique MC sampling
-            f_bi.prior_density = orig_model.prior_density  # Get from unique MC sampling
+                # 2. Set prior
+                f_bi.prior = orig_model.prior  # Get from unique MC sampling
+                f_bi.prior_density = orig_model.prior_density  # Get from unique MC sampling
 
-            # 3. Generate model outputs: filter from "model.output" (which was previously run)
-            f_bi.output = np.take(orig_model.output, combi, axis=1)
+                # 3. Generate model outputs: filter from "model.output" (which was previously run)
+                f_bi.output = np.take(orig_model.output, combi, axis=1)
 
-            # 4. Run bayes inference
-            f_bi.run_bayes_inference()
+                # 4. Run bayes inference
+                f_bi.run_bayes_inference()
 
-            # 5. Save results:
-            score_results_c[c, k, :] = np.array([f_bi.log_BME, f_bi.NNCE, f_bi.RE, f_bi.IE])
-            bme_results_c[k, c] = f_bi.BME
+                # 5. Save results:
+                score_results_c[c, k, :] = np.array([f_bi.log_BME, f_bi.NNCE, f_bi.RE, f_bi.IE])
+                bme_results_c[k, c] = f_bi.BME
 
-            if c == 0:
-                results_models[n, k] = f_bi
-                results_ce_mp[k, n] = f_bi.CE
+                if c == 0:
+                    results_models[n, k] = f_bi
+                    results_ce_mp[k, n] = f_bi.CE
 
-    # After all combinations are run, get average for each column (each possible combination, for each score)
-    results_mp[n, :, :] = np.mean(score_results_c, axis=0)
-    results_bme_mp[:, n] = np.mean(bme_results_c, axis=1)
+        # After all combinations are run, get average for each column (each possible combination, for each score)
+        results_mp[n, :, :] = np.mean(score_results_c, axis=0)
+        results_bme_mp[:, n] = np.mean(bme_results_c, axis=1)
 
-# Save results to files ------------------------------------------------------------------------------------------ #
-txt_name = os.path.join(results_path, 'runs')
-save_results_txt(results_mp, model_name, txt_name, suffix=num_dp)
+    # Save results to files --------------------------- ------------------------------------------------------------ #
+    txt_name = os.path.join(results_path, 'runs')
+    save_results_txt(results_mp, model_name, txt_name, suffix=num_dp)
 
-# Set names for plots:
-if scenario_1:
-    m_names = model_name
-else:
-    m_names = np.full(len(model_name), "M", dtype=np.str)
-    m_names = np.char.add(m_names, model_name)
+    # Set names for plots:
+    if scenario_1:
+        m_names = model_name
+    else:
+        m_names = np.full(len(model_name), "M", dtype=np.str)
+        m_names = np.char.add(m_names, model_name)
 
-# Get BME weights and plot ---------------------------------------------------------------------------------------- #
-logger.info(f"Plotting BMS results for increasing calibration data set size for scenario {suffix}.")
+    logger.info(f"Plotting BMS results for increasing calibration data set size for scenario {suffix}.")
 
-bme_weights_mp = BayesInference.calculate_model_weight(results_bme_mp)
-# plot_name = os.path.join(results_path, "\\BME_weights_mp.pdf")
-# plot_bme_weights(bme_weights_mp, np.array(num_dp), model_name, plot_name)
+    # Get BME weights and plot ------------------------------------------------------------------------------------- #
+    bme_weights_mp = BayesInference.calculate_model_weight(results_bme_mp)
+    # plot_name = os.path.join(results_path, "\\BME_weights_mp.pdf")
+    # plot_bme_weights(bme_weights_mp, np.array(num_dp), model_name, plot_name)
 
-# Plot evolving values for each score:
-plot_name = os.path.join(results_path, "EvolvingScores_mp.pdf")
-plot_evolving_values(results_mp, num_dp, model_name, plot_name, False)
+    # Plot evolving values for each score:
+    plot_name = os.path.join(results_path, "EvolvingScores_mp.pdf")
+    plot_evolving_values(results_mp, num_dp, model_name, plot_name, False)
 
-plot_name = os.path.join(results_path, "Evolving_BME_mp.pdf")
-plot_evolving_bme(results_bme_mp, bme_weights_mp, num_dp, model_name, plot_name)
+    plot_name = os.path.join(results_path, "Evolving_BME_mp.pdf")
+    plot_evolving_bme(results_bme_mp, bme_weights_mp, num_dp, model_name, plot_name)
 
-plot_name = os.path.join(results_path, "EvolvingScores_calculations_mp.pdf")
-plot_evolving_calculations(results_mp, results_ce_mp, num_dp, plot_name, m_names, all_models=True)
+    plot_name = os.path.join(results_path, "EvolvingScores_calculations_mp.pdf")
+    plot_evolving_calculations(results_mp, results_ce_mp, num_dp, plot_name, m_names, all_models=True)
 
-if scenario_1:
-    results_norm = results_mp[:, 2, :].reshape(len(num_dp), 1, results_mp.shape[2])
-    plot_name = os.path.join(results_path, "EvolvingScores_Calculations_Normal_mp.pdf")
-    plot_evolving_calculations(results_norm, results_ce_mp[2, :].reshape(1, len(num_dp)), num_dp, plot_name,
-                               np.array([model_name[2]]), all_models=False)
+    if scenario_1:
+        results_norm = results_mp[:, 2, :].reshape(len(num_dp), 1, results_mp.shape[2])
+        plot_name = os.path.join(results_path, "EvolvingScores_Calculations_Normal_mp.pdf")
+        plot_evolving_calculations(results_norm, results_ce_mp[2, :].reshape(1, len(num_dp)), num_dp, plot_name,
+                                   np.array([model_name[2]]), all_models=False)
 
-    # Plot evolving prior/posterior values
-    plot_name = os.path.join(results_path,"Prior_Post_NormalDist_mp.pdf")
-    plot_prior_post(results_models[:, 2], plot_name)  # Model N[0,1]
-else:
-    plot_name = os.path.join(results_path, "EvolvingScores_Calculations_M1.pdf")
-    plot_evolving_calculations(results_mp, results_ce_mp, num_dp, plot_name, m_names, all_models=False)
-    # Plot evolving prior/posterior values
-    plot_name = os.path.join(results_path, "Prior_Post_M1_mp.pdf")
-    plot_prior_post(results_models[:, 0], plot_name)  # Model 1
+        # Plot evolving prior/posterior values
+        plot_name = os.path.join(results_path,"Prior_Post_NormalDist_mp.pdf")
+        plot_prior_post(results_models[:, 2], plot_name)  # Model N[0,1]
+    else:
+        plot_name = os.path.join(results_path, "EvolvingScores_Calculations_M1.pdf")
+        plot_evolving_calculations(results_mp, results_ce_mp, num_dp, plot_name, m_names, all_models=False)
+        # Plot evolving prior/posterior values
+        plot_name = os.path.join(results_path, "Prior_Post_M1_mp.pdf")
+        plot_prior_post(results_models[:, 0], plot_name)  # Model 1
 
-# plot_likelihoods(results_models[:, 0], "Likelihoods_Model1_DP", plot_results)  # Model 1
-# plot_lpd(results_models)
-# plot_lpd(results_models[:, 0, None])
+    # plot_likelihoods(results_models[:, 0], "Likelihoods_Model1_DP", plot_results)  # Model 1
+    # plot_lpd(results_models)
+    # plot_lpd(results_models[:, 0, None])
 # ------------------------------------------------------------------------------------------------------------------ #
 
 
