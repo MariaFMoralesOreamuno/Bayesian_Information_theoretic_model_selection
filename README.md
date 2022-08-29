@@ -105,6 +105,17 @@ Module runs the Bayesian model selection and model similarity analysis for a set
 
 [^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. 
 
+## Bayesian and information-theoretic score calculation
+The file *bayes_inference.py* contains the classes and corresponding functions to calculate the different Bayesian and information-theoretic scores for Bayesian model selection analysis. 
+
+The file *model_similarity_analysis.py* contains the classes and corresponding functions to calculate the different Bayesian and information-theoretic scores and model confusion matrices (MCM) for Bayesian model similarity analysis. 
+
+The file *measurement_data.py* contains the class to save instances of observed data, which is used by the classes in *bayes_inference.py* and *model_similarity_analysis.py*. 
+
+
+## Plotting 
+The files *plots_fun.py*, *plotsfun_gw.py* and *plot_trends.py* are used to plot the different results for the different stand-alone modules. The figures are generated using Matplotlib (https://matplotlib.org/) with version 3.4.3 and Seaborn (https://seaborn.pydata.org/) with version 0.11.2. 
+
 
 ## Module Outputs
 ### main_analytical_models.py and main_groundwater_model.py
@@ -126,3 +137,8 @@ For main_analytical_models.py, with var_num_mp=True:
 The program outputs are plots (in pdf format) with the following information: 
 - Posterior sample size with increasing variable value, for each competing model 
 - Evolving a) ln(BME), b) ELPD, c) RE and d) IE scores for each competing model in the Bayesian model selection setup for increasing variable value. 
+
+## Disclaimer
+No warranty is expressed or implied regarding the usefulness or completeness of the information and documentation provided. References to commercial products do not imply endorsement by the Authors. The concepts, materials, and methods used in the algorithms and described in the documentation are for informational purposes only. The Authors have made substantial effort to ensure the accuracy of the algorithms and the documentation, but the Authors shall not be held liable, nor his employer or funding sponsors, for calculations and/or decisions made on the basis of application of the scripts and documentation. The information is provided "as is" and anyone who chooses to use the information is responsible for her or his own choices as to what to do with the data. The individual is responsible for the results that follow from their decisions.
+
+This web site contains external links to other external web sites and information provided by third parties. There may be technical inaccuracies, typographical or other errors such as programming bugs or computer viruses contained within the web site or its contents. Users may use the information and links at their own risk. The Authors of this web site exclude all warranties, whether expressed or implied, relating in any way to this website or the use of this web site; and liability (including for negligence) to users in respect of any loss or damage (including special, indirect or consequential loss or damage such as loss of revenue, unavailability of systems or loss of data) arising from or in connection with any use of the information on or accessed through this website for any reason whatsoever (including negligence).
