@@ -81,6 +81,31 @@ a) measurement error or b)number of parameters.
 |`var_num_params`| *boolean* | True, to run scenario for the different number of model parameters in 'num_p'| 
 |`num_p`| *list of integers* | list with the different number of parameters for which to run the BMS scenarios| 
 
+### main_groundwater_model.py 
+Module runs the Bayesian model selection and model similarity analysis for a set of 5 groundwater models. The following 5 models are considered, they in the ln(K) spatial distribution model and/or the data set size considered: 
+- homogeneous transport model: 1 uncertain parameter, 2 output types (hydraulic head and concentration)
+- 5-zoned transport model: 5 uncertain parameters, 2 output types (hydraulic head and concentration)
+- 5-zoned flow model: 5 uncertain parameters, 1 output types (hydraulic head)
+- 9-zoned transport model: 9 uncertain parameters, 2 output types (hydraulic head and concentration)
+- geostatistical model: 2500 uncertain parameters, 2 output types (hydraulic head and concentration) 
+
+| Input argument | Type | Description |
+|----------------|------|-------------|
+|`path_meas`| *string*| Path where .mat file with measurement data is located.|
+|`path_Y`| *string* | Path where .mat file with true ln(K) spatial distribution values are located.|
+|`path_true_sol`| *string*| Path where true_solution.mat file with the synthetic true measurement data is located. |
+|`path_hm`[^1] | *string*| Path where .mat file with data for homogenous model is located. |
+|`path_zm`[^1] | *string*| Path where .mat file with data for 5-zoned model is located.|
+|`path_zm2`[^1] | *string*| Path where .mat file with data for 9-zoned model is located.|
+|`path_gm`[^1] | *string*| Path where .mat file with data for geostatistical model is located.|
+|`path_bmj_hm`[^1] | *string*| Path where .mat file with results from the homogenous model (for the model similiarty analysis) is located.|
+|`path_bmj_zm`[^1] | *string*| Path where .mat file with  results from the zoned model (for the model similiarty analysis) is located.|
+|`path_bmj_gm`[^1] |*string*| Path where .mat file with results from the geostatistical model (for the model similiarty analysis) is located.|
+|`results_path`[^1] |*string*| Path where results for groundwater models are to be saved. |
+
+[^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. 
+
+
 ## Module Outputs
 ### main_analytical_models.py and main_groundwater_model.py
 The program outputs are plots (in pdf format) with the following information: 
