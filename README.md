@@ -101,7 +101,7 @@ Module runs the Bayesian model selection and model similarity analysis for a set
 |`path_bmj_hm`[^1] | *string*| Path where .mat file with results from the homogenous model (for the model similiarty analysis) is located.|
 |`path_bmj_zm`[^1] | *string*| Path where .mat file with  results from the zoned model (for the model similiarty analysis) is located.|
 |`path_bmj_gm`[^1] |*string*| Path where .mat file with results from the geostatistical model (for the model similiarty analysis) is located.|
-|`results_path`[^1] |*string*| Path where results for groundwater models are to be saved. |
+|`results_path` |*string*| Path where results for groundwater models are to be saved. |
 
 [^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. 
 
