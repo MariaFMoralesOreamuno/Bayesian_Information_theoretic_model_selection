@@ -89,21 +89,25 @@ Module runs the Bayesian model selection and model similarity analysis for a set
 - 9-zoned transport model: 9 uncertain parameters, 2 output types (hydraulic head and concentration)
 - geostatistical model: 2500 uncertain parameters, 2 output types (hydraulic head and concentration) 
 
-| Input argument | Type | Description |
-|----------------|------|-------------|
-|`path_meas`| *string*| Path where .mat file with measurement data is located.|
-|`path_Y`| *string* | Path where .mat file with true ln(K) spatial distribution values are located.|
-|`path_true_sol`| *string*| Path where true_solution.mat file with the synthetic true measurement data is located. |
-|`path_hm`[^1] | *string*| Path where .mat file with data for homogenous model is located. |
-|`path_zm`[^1] | *string*| Path where .mat file with data for 5-zoned model is located.|
-|`path_zm2`[^1] | *string*| Path where .mat file with data for 9-zoned model is located.|
-|`path_gm`[^1] | *string*| Path where .mat file with data for geostatistical model is located.|
-|`path_bmj_hm`[^1] | *string*| Path where .mat file with results from the homogenous model (for the model similiarty analysis) is located.|
-|`path_bmj_zm`[^1] | *string*| Path where .mat file with  results from the zoned model (for the model similiarty analysis) is located.|
-|`path_bmj_gm`[^1] |*string*| Path where .mat file with results from the geostatistical model (for the model similiarty analysis) is located.|
+| Input argument | Type | Description | File name[^2]
+|----------------|------|-------------|--------------|
+|`path_meas`| *string*| Path where .mat file with measurement data is located.| measurements_fest.mat|
+|`path_Y`| *string* | Path where .mat file with true ln(K) spatial distribution values are located.| Y_true_fest.mat|
+|`path_true_sol`| *string*| Path where .mat file with the synthetic true measurement data is located. | true_solution_fest.mat|
+|`path_hm`[^1] | *string*| Path where .mat file with data for homogenous model is located. |1e6/homogeneous_model.mat|
+|`path_zm`[^1] | *string*| Path where .mat file with data for 5-zoned model is located.|1e6/5_zoned_model.mat|
+|`path_zm2`[^1] | *string*| Path where .mat file with data for 9-zoned model is located.|1e6/9_zoned_model.mat|
+|`path_gm`[^1] | *string*| Path where .mat file with data for geostatistical model is located.|1e6/geostatistical_model.mat|
+|`path_bmj_hm`[^1] | *string*| Path where .mat file with results from the homogenous model (for the model similiarty analysis) is located.|1e3/homogeneous_model.mat|
+|`path_bmj_zm`[^1] | *string*| Path where .mat file with  results from the 5-zoned model (for the model similiarty analysis) is located.|1e3/5_zoned_model.mat|
+|`path_bmj_zm2`[^1] | *string*| Path where .mat file with  results from the 9-zoned model (for the model similiarty analysis) is located.|1e3/9_zoned_model.mat|
+|`path_bmj_gm`[^1] |*string*| Path where .mat file with results from the geostatistical model (for the model similiarty analysis) is located.|1e3/geostatistical.mat|
 |`results_path` |*string*| Path where results for groundwater models are to be saved. |
 
-[^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. The configuration of said files and the data extracted from each one is found within the .py module. 
+[^1]: These files correspond to the parameter prior and output data for each run of the 2D groundwater model. The configuration of said files and the data extracted from each one is found within the .py module. 
+[^2]: The file names correspond to the name of the .m files located in the following link: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7086127.svg)](https://doi.org/10.5281/zenodo.7086127)
+
+The input files needed to run the module can be found in the following link: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7086127.svg)](https://doi.org/10.5281/zenodo.7086127)
 
 ## Bayesian and information-theoretic score calculation
 The file *bayes_inference.py* contains the classes and corresponding functions to calculate the different Bayesian and information-theoretic scores for Bayesian model selection analysis. 
