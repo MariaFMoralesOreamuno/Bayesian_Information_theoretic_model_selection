@@ -15,7 +15,7 @@ Schöniger, A., Illman, W. A., Wöhling, T., & Nowak, W. (2015). Finding the rig
 Schöniger, A., Nowak, W., & Hendricks Franssen, H. J. (2012). Parameter estimation by ensemble Kalman filters with transformed data: Approach and application to hydraulic tomography. Water Resources Research, 48(4). https://doi.org/10.1029/2011WR010462
 
 ## Requirements
-To install python3 please refer to the intrsuctions in the link [here](https://hydro-informatics.com/python-basics/pyinstall.html).
+To install python3 please refer to the instructions in the link [here](https://hydro-informatics.com/python-basics/pyinstall.html).
 
 All of the python3 libraries are initialized in the module *config.py*. 
 ### Basic libraries
@@ -45,9 +45,9 @@ File corresponds to the Bayesian model selection and similarity analysis for two
 1) 3 competing models, all based on the same equation and different prior probability distributions (U[-5,5], U[-3,3], N[0,1]) or 
 2) 5 competing models, all comprised of different equations and with the same prior probability distribution (Uniform[-5,5] for all parameters, for all 5 models)
 
-The analytical model is based on the one presented in Oladyshkin & Nowak (2019). 
+The analytical model setup is based on the analytical model used in Oladyshkin & Nowak (2019). This setup exemplifies the implementation of the proposed methodology for simple test cases. 
 
-The module first generates the synthetic model run, to be taken as the measurement data. It then runs the Bayesian model selection (BMS) analysis first for the total calibration data set size, and then for increasing calibration data set size. Lastly, it then runs the Bayesian model similarity analysis based on Schöniger et al (2015). 
+The module first generates the synthetic model run, to be taken as the true measurement data. It then runs the Bayesian model selection (BMS) analysis first for the total calibration data set size, and then for increasing calibration data set size. Lastly, it then runs the Bayesian model similarity analysis based on the Bayesian justifiability analysis presented in Schöniger et al (2015). 
 
 | Input argument | Type | Description |
 |----------------|------|-------------|
@@ -103,7 +103,7 @@ Module runs the Bayesian model selection and model similarity analysis for a set
 |`path_bmj_gm`[^1] |*string*| Path where .mat file with results from the geostatistical model (for the model similiarty analysis) is located.|
 |`results_path` |*string*| Path where results for groundwater models are to be saved. |
 
-[^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. 
+[^1]: These files correspond to the prior and output data for each run of the 2D groundwater model. The configuration of said files and the data extracted from each one is found within the .py module. 
 
 ## Bayesian and information-theoretic score calculation
 The file *bayes_inference.py* contains the classes and corresponding functions to calculate the different Bayesian and information-theoretic scores for Bayesian model selection analysis. 
