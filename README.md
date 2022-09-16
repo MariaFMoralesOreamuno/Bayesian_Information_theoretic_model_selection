@@ -45,7 +45,7 @@ File corresponds to the Bayesian model selection and similarity analysis for two
 1) 3 competing models, all based on the same equation and different prior probability distributions (U[-5,5], U[-3,3], N[0,1]) or 
 2) 5 competing models, all comprised of different equations and with the same prior probability distribution (Uniform[-5,5] for all parameters, for all 5 models)
 
-The analytical model setup is based on the analytical model used in Oladyshkin & Nowak (2019). The analytical models are implemented in the ´analytical_functions.py´ file. This setup exemplifies the implementation of the proposed methodology for simple test cases. 
+The analytical model setup is based on the analytical model used in Oladyshkin & Nowak (2019). The analytical models are implemented in the *analytical_functions.py* file. This setup exemplifies the implementation of the proposed methodology for simple test cases. 
 
 The module first generates the synthetic model run, to be taken as the true measurement data. It then runs the Bayesian model selection (BMS) analysis first for the total calibration data set size, and then for increasing calibration data set size. Lastly, it then runs the Bayesian model similarity analysis based on the Bayesian justifiability analysis presented in Schöniger et al (2015). 
 
